@@ -15,7 +15,9 @@ RUN pip3 install --upgrade pip setuptools
 RUN rm -rf /var/lib/apt/lists/*
 
 # Python is Python3.
-RUN ln -s /usr/bin/python3 /usr/bin/python
+ENV VIRTUAL_ENV=/edx/app/registrar/venvs/registrar
+RUN python3.8 -m venv $VIRTUAL_ENV
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 # Use UTF-8.
 RUN locale-gen en_US.UTF-8
@@ -39,8 +41,8 @@ WORKDIR /edx/app/registrar
 
 # Copy just Python requirements & install them.
 COPY requirements/ /edx/app/registrar/requirements/
-COPY Makefile /edx/app/registrar/
-RUN make production-requirements
+RUN pip install -r requirements/pip.txt
+RUN pip install -r requirements/production.txt
 
 USER app
 

@@ -85,6 +85,7 @@ upgrade: piptools  $(COMMON_CONSTRAINTS_TXT)  ## re-compile requirements .txt fi
 	mv requirements/test.tmp requirements/test.txt
 
 piptools:
+	pip install -r requirements/pip.txt
 	pip install -r requirements/pip-tools.txt
 
 requirements: devstack-requirements ## alias to make devstack-requirements
