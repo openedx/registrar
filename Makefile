@@ -7,7 +7,7 @@ TOX=''
         createsuperuser html_coverage extract_translations dummy_translations \
         fake_translations pull_translations push_translations \
         detect_changed_source_translations validate_translations api_generated \
-        validate_api_committed
+        validate_api_committed check_keywords
 
 define BROWSER_PYSCRIPT
 import os, webbrowser, sys
@@ -169,6 +169,9 @@ detect_changed_source_translations: ## check if translation files are up-to-date
 	cd registrar && i18n_tool changed
 
 validate_translations: fake_translations detect_changed_source_translations ## install fake translations and check if translation files are up-to-date
+
+check_keywords: ## Scan the Django models in all installed apps in this project for restricted field names
+	python manage.py check_reserved_keywords --override_file db_keyword_overrides.yml
 
 # Docker commands
 

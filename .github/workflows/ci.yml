@@ -50,3 +50,9 @@ jobs:
       with:
         flags: unittests
         fail_ci_if_error: true
+    - name: Make Check Reserved Keywords
+      env:
+        TOXENV: ${{ matrix.toxenv }}
+        DJANGO_SETTINGS_MODULE: registrar.settings.test
+      run: |
+        make check_keywords
