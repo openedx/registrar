@@ -3,6 +3,7 @@
 from django.conf import settings
 from django.urls import reverse
 
+from registrar.helpers import append_slash
 
 def build_absolute_api_url(url_name, **kwargs):
     """
@@ -17,7 +18,7 @@ def build_absolute_api_url(url_name, **kwargs):
 
     Returns: str
     """
-    return to_absolute_api_url(reverse(url_name, kwargs=kwargs))
+    return to_absolute_api_url(append_slash(reverse(url_name, kwargs=kwargs)))
 
 
 def to_absolute_api_url(path, *more_paths):

@@ -9,6 +9,7 @@ from django.test import TestCase
 from django.test.utils import override_settings
 from django.urls import reverse
 
+from registrar.helpers import append_slash
 from ..constants import Status
 
 
@@ -29,7 +30,7 @@ class HealthTests(TestCase):
 
     def _assert_health(self, status_code, overall_status, database_status):
         """Verify that the response matches expectations."""
-        response = self.client.get(reverse('health'))
+        response = self.client.get(append_slash(reverse('health')))
         self.assertEqual(response.status_code, status_code)
         self.assertEqual(response['content-type'], 'application/json')
 
@@ -45,7 +46,7 @@ class HealthTests(TestCase):
 
 class AutoAuthTests(TestCase):
     """ Auto Auth view tests. """
-    AUTO_AUTH_PATH = reverse('auto_auth')
+    AUTO_AUTH_PATH = append_slash(reverse('auto_auth'))
 
     @override_settings(ENABLE_AUTO_AUTH=False)
     def test_setting_disabled(self):

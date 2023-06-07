@@ -86,7 +86,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 
 ROOT_URLCONF = 'registrar.urls'
-APPEND_SLASH = False
+APPEND_SLASH = True
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'registrar.wsgi.application'

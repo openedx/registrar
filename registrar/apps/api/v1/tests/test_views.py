@@ -12,6 +12,7 @@ import boto3
 import ddt
 import moto
 import requests
+from registrar.helpers import append_slash
 import responses
 from celery import shared_task
 from django.conf import settings
@@ -1798,7 +1799,7 @@ class ProgramCourseEnrollmentWriteMixin:
             'program_key': program_key or self.cs_program.key,
             'course_id': course_id or self.course_id,
         }
-        return reverse('api:v1:program-course-enrollment', kwargs=kwargs)
+        return append_slash(reverse('api:v1:program-course-enrollment', kwargs=kwargs))
 
     def mock_course_enrollments_response(self, method, expected_response, response_code=200):
         self.mock_api_response(self.lms_request_url, expected_response, method=method, response_code=response_code)
