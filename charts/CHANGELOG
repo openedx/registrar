@@ -1,0 +1,188 @@
+0.8.18
+Fix ingress configuration snippet so that it is not bound by allow_django_admin
+
+0.8.17
+Feature to add NewRelic HTTP header and client-max-body-size to ingress
+
+0.8.16
+Updated the User ID use in k8s-cli-utils. It was updated in this PR (https://github.com/edx/k8s-cli-utils/pull/14)
+
+0.8.15
+Switch k8s-cli-utils image from dockerhub to ECR
+
+0.8.14
+Feature to allow configurable resource limits for CronJobs
+
+0.8.13
+Add feature to allow custom migration commands
+
+0.8.12
+Fix feature to allow worker resource limits to be configurable
+
+0.8.11
+Properly quote and escape shell script interpolations for deployments and cron jobs as well.
+
+0.8.10
+Add feature to allow worker resource limits to be configurable
+
+0.8.9
+Fix app deployment issue by adding the missing mounted volumes section when migrations are disabled
+
+0.8.8
+Proceed with running Django migrations only when it is enabled
+
+0.8.7
+Added additionalLabels env, owner and team for kubecost aggregations using range
+
+0.8.6
+Increase memory limit for celery workers to fix discovery celery workers from crashing due to resource limits being exceeded
+
+0.8.5
+Fix YAML injection prevention; `quote` output's escaping is only compatible with YAML, not Bash strings
+
+0.8.4
+Prevented YAML injection in worker command
+
+0.8.3
+Updated the Cron job template to support schedules that need to be quoted.
+
+0.8.2
+Updated the Cron job Api version to batch/v1. Previous api version was deprecated in k8s 1.21 and removed in 1.25.
+
+0.8.1
+Add option to configure the name of python (e.g. python, python3, python3.9) used to run command in migration init
+container. Defaults to python3.
+
+0.8.0
+Removed ingress class variable in favor of new className variable. The class variable is used to set the old annotation
+kubernetes.io/ingress.class which has been replaced by ingressClassName in the spec of the v1 of the ingress api
+
+0.7.2
+Add extra_tls_hosts variable to allow adding extra hostnames to TLS certs
+Make ingress and tls secret names stable on ingresses using the new className variable to prevent shuffling. 
+
+0.7.1
+Add new ingress class variable to fix issue with 0.7.0 that causes new ingresses to not be created, because kubernetes
+doesn't allow you to set the new className variable on the spec and the old annotation at the same time.
+
+0.7.0
+Add ingressClassName to ingress spec for compatibility with networking.k8s.io/v1 Ingress and Kubernetes 1.22
+
+0.6.2
+Add custom annotation to ingress object for external dns cloudflare
+
+0.6.1
+Adding option to specify command for collectstatic job
+
+0.6.0
+Changed imagePullPolicy to Always for app containers to fix issue with images not updating after rebuild. Currently
+image tags are not immutable, so we need to always check the Docker image repository for updates images.
+
+0.5.8
+Add custom annotation for external dns
+
+0.5.7
+Add health_check.host_header to customize livenessProbe HTTP Host header
+
+0.5.6
+Add support for DB_MIGRATION_PASS with Bash special characters
+
+0.5.5
+Only create app HPA resource if app is enabled
+
+0.5.4
+Add option to toggle off app deployment (default set to True)
+
+0.5.3
+Upgrade ingress apiVersion from extensions/v1beta1 to networking.k8s.io/v1
+
+0.5.2
+Adding option to specify resources for POD.
+
+0.5.1
+Adding option to specify initialDelaySeconds for readiness and liveness probes.
+
+0.5.0
+Removeing migrations from cronjobs and workers since this makes the db state harder to reason about.  
+Migrations will only be run when the application image is deployed.  Remove migration secrets from cronjobs and workers since they
+are no longer needed.
+
+0.4.1
+Removing mysql and elasticsearch subcharts
+
+0.4.0
+Removing support for development_mysql and development_elasticsearch
+
+0.3.8
+Default vault url updated to https://vault.prod.edx.org
+
+0.3.7
+Enabled tls by default for django-ida helm chart
+added flag vault.use_tls to disable this behaviour.
+
+0.3.6
+New version of k8s-cli-util
+Move from the older stable url to the newer one for the dev mysql deployment
+
+0.3.5
+New version of k8s-cli-util
+
+0.3.4
+Moved autoscaler api endpoints to use apps/v1 instead of apps/v1beta1, requires K8s > 1.10, but should 
+otherwise be reverse compatible.
+
+0.3.3
+Ingresses now have a generated number after them to prevent names colliding
+
+0.3.2
+Added parameter to allow the customization of the healthcheck endpoint with
+/health as the default value.
+health_check.endpoint: "/health"
+
+Added a liveness check that is different from the readiness check.
+
+0.3.1
+Added ability to override the app.port, default is backwards compatible
+        app.port: 18170
+
+0.3.0
+Change defaults for the following variables as it was discovered
+that the apps are mostly consistent, it is vault that is inconsistent.
+        app.migrations.migrate_db_user_env_name: DB_MIGRATION_USER
+        app.migrations.migrate_db_pass_env_name: DB_MIGRATION_PASS
+
+0.2.2
+Fix secret render indentation to fit configmap
+
+0.2.1
+Render config as Yaml instead of as a serialized map
+
+v0.2.0
+Added the following values to allow user to overwrite migration env names,
+since they differ between applications.  The following defaults were assigned:
+
+        app.migrations.migrate_db_user_env_name: DATABASE_MIGRATE_USER
+        app.migrations.migrate_db_pass_env_name: DATABASE_MIGRATE_PASSWORD
+
+This is a breaking change since the default migrate_db_pass_env_name was
+previously: DB_MIGRATION_PASS
+
+v0.1.1
+Fixed bug where image:tag pairings were not valid
+
+v0.1.0
+Added overridable issuer for ingresses for the cert issuer.
+You will need to add an 'issuer' to each ingress using this version.
+
+v0.0.4
+Fix bug that resulted in an impossible autoscaling configuration min > max
+
+v0.0.3
+Allow applications to not specify a role_arn. Removed fake role ARN from service accounts by default.
+
+v0.0.2
+Added support for arbitrary application environment variables that get passed into all containers running the application image
+to support applications that have non standard ENV setups.  
+
+v0.0.1
+Initial commit

@@ -1,0 +1,121 @@
+{{- range .Values.cronjobs }}
+{{- $job := . -}}
+{{- with $ }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ $job.name }}
+spec:
+  concurrencyPolicy: Forbid
+  schedule: "{{ $job.schedule }}"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - args:
+            - "source /vault-api-secrets/secrets/secret.env && \
+               exec {{ if $.Values.newrelic.enabled }}newrelic-admin run-program{{ end }} \
+               {{ regexReplaceAll "^\"|\"$" (quote $job.command) "" }}"
+            command:
+            - /bin/bash
+            - -c
+            - --
+            env:
+            - name: {{  .Values.app.secret_file_env_name }}
+              value: /vault-api-secrets/secrets/{{ .Values.app.secret_file_name }}
+            - name: NEW_RELIC_APP_NAME
+              valueFrom:
+                configMapKeyRef:
+                  key: NEW_RELIC_APP_NAME
+                  name: app-cm
+            - name: NEW_RELIC_LOG_LEVEL
+              valueFrom:
+                configMapKeyRef:
+                  key: NEW_RELIC_LOG_LEVEL
+                  name: app-cm
+            - name: NEW_RELIC_LICENSE_KEY
+              value: Secret value filled in from secrets.env
+            {{- range $env := .Values.app.extraEnvs }}
+            - name: {{ $env.name }}
+              value: {{ $env.value }}
+            {{- end }}
+            image: {{  .Values.app.image.repository }}:{{  .Values.app.image.tag }}
+            imagePullPolicy: Always
+            name: {{ $job.name }}
+            resources:
+              limits:
+                cpu: {{ (($job.resources).limits).cpu | default "100m" }}
+                memory: {{ (($job.resources).limits).memory | default "1Gi" }}
+              requests:
+                cpu: {{ (($job.resources).requests).cpu | default "25m" }}
+                memory: {{ (($job.resources).requests).memory | default "512Mi" }}
+            volumeMounts:
+            - mountPath: /vault-api-secrets/secrets
+              name: vault-api-secrets
+              readOnly: true
+          initContainers:
+          - env:
+            - name: VAULT_ADDR
+              valueFrom:
+                configMapKeyRef:
+                  key: VAULT_ADDR
+                  name: app-cm
+            - name: VAULT_ROLE
+              valueFrom:
+                configMapKeyRef:
+                  key: VAULT_ROLE
+                  name: app-cm
+            - name: TOKEN_DEST_PATH
+              value: /vault-auth-secrets/secrets/.vault-token
+            - name: ACCESSOR_DEST_PATH
+              value: /vault-auth-secrets/secrets/.vault-accessor
+            image: edxops/vault-kubernetes-authenticator:latest
+            imagePullPolicy: IfNotPresent
+            name: vault-authenticator
+            volumeMounts:
+            - mountPath: /vault-auth-secrets/secrets
+              name: vault-auth-secrets
+          - command:
+            - /bin/sh
+            - -c
+            - |
+              set -xe
+              /bin/consul-template -config /app-cm/vault.hcl -template "/app-cm/{{ .Values.app.secret_file_name }}:/vault-api-secrets/secrets/{{ .Values.app.secret_file_name }}" -once
+              /bin/consul-template -config /app-cm/vault.hcl -template "/app-cm/secret.env:/vault-api-secrets/secrets/secret.env" -once
+            env:
+            - name: VAULT_ADDR
+              valueFrom:
+                configMapKeyRef:
+                  key: VAULT_ADDR
+                  name: app-cm
+            image: hashicorp/consul-template:0.20.0-light
+            imagePullPolicy: IfNotPresent
+            name: secret-render
+            volumeMounts:
+            - mountPath: /vault-auth-secrets/secrets
+              name: vault-auth-secrets
+              readOnly: true
+            - mountPath: /vault-api-secrets/secrets
+              name: vault-api-secrets
+            - mountPath: /app-cm
+              name: app-cm
+          restartPolicy: Never
+          securityContext:
+            fsGroup: 1000
+            runAsGroup: 1000
+            runAsUser: 1000
+          serviceAccountName: {{ .Values.app.service_account_name }}
+          volumes:
+          - emptyDir:
+              medium: Memory
+            name: vault-auth-secrets
+          - emptyDir:
+              medium: Memory
+            name: vault-api-secrets
+          - configMap:
+              name: app-cm
+            name: app-cm
+{{- end }}
+{{- end }}

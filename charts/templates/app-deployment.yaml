@@ -1,0 +1,218 @@
+{{ if .Values.app.enabled}}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/instance: {{ .Values.app.name }}
+    app.kubernetes.io/name: {{ .Values.app.name }}
+    {{- range $key, $val := .Values.app.additionalLabels }}
+    {{ $key }}: {{ $val }}
+    {{- end}}
+  name: {{ .Values.app.name }}
+  annotations:
+    ignore-check.kube-linter.io/no-read-only-root-fs: "Temporarily ignore check no-read-only-root-fs until PSRE-2074 is resolved"
+spec:
+  revisionHistoryLimit: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: {{ .Values.app.name }}
+      app.kubernetes.io/name: {{ .Values.app.name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: {{ .Values.app.name }}
+        app.kubernetes.io/name: {{ .Values.app.name }}
+        {{- range $key, $val := .Values.app.additionalLabels }}
+        {{ $key }}: {{ $val }}
+        {{- end}}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+    spec:
+      containers:
+      - args:
+        - "source /vault-api-secrets/secrets/secret.env && \
+           exec {{ if .Values.newrelic.enabled }}newrelic-admin run-program{{ end }} \
+           {{ regexReplaceAll "^\"|\"$" (quote .Values.app.command) "" }}"
+        command:
+        - /bin/bash
+        - -c
+        - --
+        env:
+        - name: {{  .Values.app.secret_file_env_name }}
+          value: /vault-api-secrets/secrets/{{ .Values.app.secret_file_name }}
+        - name: NEW_RELIC_APP_NAME
+          valueFrom:
+            configMapKeyRef:
+              key: NEW_RELIC_APP_NAME
+              name: app-cm
+        - name: NEW_RELIC_LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              key: NEW_RELIC_LOG_LEVEL
+              name: app-cm
+        - name: NEW_RELIC_LICENSE_KEY
+          value: Secret value filled in from secrets.env
+        {{- range $env := .Values.app.extraEnvs }}
+        - name: {{ $env.name }}
+          value: {{ $env.value }}
+        {{- end }}
+        image: {{  .Values.app.image.repository }}:{{  .Values.app.image.tag }}
+        imagePullPolicy: Always
+        livenessProbe:
+          initialDelaySeconds: {{ .Values.app.health_check.liveness_probe_initial_delay_seconds}}
+          exec:
+            command:
+            - ls
+          periodSeconds: 5
+        name: {{ .Values.app.name }}
+        ports:
+        - containerPort: {{ .Values.app.port }}
+          name: http
+          protocol: TCP
+        readinessProbe:
+          initialDelaySeconds: {{ .Values.app.health_check.readiness_probe_initial_delay_seconds}}
+          httpGet:
+            httpHeaders:
+                - name: Host
+                  value: {{ .Values.app.health_check.host_header }}
+            path: {{ .Values.app.health_check.endpoint }}
+            port: http
+          timeoutSeconds: 3
+        resources:
+          limits:
+            cpu: {{ .Values.resources.limits.cpu }}
+            memory: {{ .Values.resources.limits.memory }}
+          requests:
+            cpu: {{ .Values.resources.requests.cpu }}
+            memory: {{ .Values.resources.requests.memory }}
+        volumeMounts:
+        - mountPath: /vault-api-secrets/secrets
+          name: vault-api-secrets
+          readOnly: true
+      initContainers:
+      - env:
+        - name: VAULT_ADDR
+          valueFrom:
+            configMapKeyRef:
+              key: VAULT_ADDR
+              name: app-cm
+        - name: VAULT_ROLE
+          valueFrom:
+            configMapKeyRef:
+              key: VAULT_ROLE
+              name: app-cm
+        - name: TOKEN_DEST_PATH
+          value: /vault-auth-secrets/secrets/.vault-token
+        - name: ACCESSOR_DEST_PATH
+          value: /vault-auth-secrets/secrets/.vault-accessor
+        image: edxops/vault-kubernetes-authenticator:3b373bc86ade783492b6619552d2b172a6e12a8b
+        imagePullPolicy: IfNotPresent
+        name: vault-authenticator
+        volumeMounts:
+        - mountPath: /vault-auth-secrets/secrets
+          name: vault-auth-secrets
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "48Mi"
+          limits:
+            cpu: "100m"
+            memory: "64Mi"
+        securityContext:
+          readOnlyRootFilesystem: true
+      - command:
+        - /bin/sh
+        - -c
+        - |
+          set -xe
+          /bin/consul-template -config /app-cm/vault.hcl -template "/app-cm/{{ .Values.app.secret_file_name }}:/vault-api-secrets/secrets/{{ .Values.app.secret_file_name }}" -once
+          /bin/consul-template -config /app-cm/vault.hcl -template "/app-cm/secret.env:/vault-api-secrets/secrets/secret.env" -once
+          /bin/consul-template -config /app-cm/vault.hcl -template "/app-cm/migrate.env:/vault-migrate-secrets/secrets/migrate.env" -once
+        env:
+        - name: VAULT_ADDR
+          valueFrom:
+            configMapKeyRef:
+              key: VAULT_ADDR
+              name: app-cm
+        image: hashicorp/consul-template:0.20.0-light
+        imagePullPolicy: IfNotPresent
+        name: secret-render
+        volumeMounts:
+        - mountPath: /vault-auth-secrets/secrets
+          name: vault-auth-secrets
+          readOnly: true
+        - mountPath: /vault-api-secrets/secrets
+          name: vault-api-secrets
+        - mountPath: /vault-migrate-secrets/secrets
+          name: vault-migrate-secrets
+        - mountPath: /app-cm
+          name: app-cm
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "48Mi"
+          limits:
+            cpu: "100m"
+            memory: "64Mi"
+        securityContext:
+          readOnlyRootFilesystem: true
+      {{ if .Values.app.migrations.enabled }}
+      - args:
+        - source /vault-migrate-secrets/secrets/migrate.env && {{ .Values.app.migrations.migration_command }}
+        command:
+        - /bin/bash
+        - -c
+        - --
+        env:
+        - name: {{  .Values.app.secret_file_env_name }}
+          value: /vault-api-secrets/secrets/{{ .Values.app.secret_file_name }}
+        - name: DB_MIGRATION_USER
+          valueFrom:
+            configMapKeyRef:
+              key: {{ .Values.app.migrations.migrate_db_user_env_name }}
+              name: app-cm
+              optional: true
+        - name: {{ .Values.app.migrations.migrate_db_pass_env_name }}
+          value: Secret value filled in from migrate.env
+        {{- range $env := .Values.app.extraEnvs }}
+        - name: {{ $env.name }}
+          value: {{ $env.value }}
+        {{- end }}
+        image: {{  .Values.app.image.repository }}:{{  .Values.app.image.tag }}
+        name: {{ .Values.app.migrations.name}}
+        resources:
+          limits:
+            cpu: 100m
+            memory: 512Mi
+          requests:
+            cpu: 25m
+            memory: 512Mi
+        volumeMounts:
+        - mountPath: /vault-migrate-secrets/secrets
+          name: vault-migrate-secrets
+          readOnly: true
+        - mountPath: /vault-api-secrets/secrets
+          name: vault-api-secrets
+          readOnly: true
+      {{ end }}
+      securityContext:
+        fsGroup: 1000
+        runAsGroup: 1000
+        runAsUser: 1000
+      serviceAccountName: {{ .Values.app.service_account_name }}
+      volumes:
+      - emptyDir:
+          medium: Memory
+        name: vault-auth-secrets
+      - emptyDir:
+          medium: Memory
+        name: vault-api-secrets
+      - emptyDir:
+          medium: Memory
+        name: vault-migrate-secrets
+      - configMap:
+          name: app-cm
+        name: app-cm
+
+{{ end }}

@@ -1,0 +1,9 @@
+{{ if .Values.collectstatic.enabled }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    eks.amazonaws.com/role-arn: {{ .Values.collectstatic.asset_write_role }}
+  name: {{ .Values.collectstatic.job_name }}
+{{ end }}

@@ -1,0 +1,194 @@
+
+{{ if .Values.collectstatic.enabled }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/instance: {{ .Values.collectstatic.job_name }}
+    app.kubernetes.io/name: {{ .Values.collectstatic.job_name }}
+    {{- range $key, $val := .Values.app.additionalLabels }}
+    {{ $key }}: {{ $val }}
+    {{- end}}
+  name: {{ .Values.collectstatic.job_name }}
+spec:
+  revisionHistoryLimit: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: {{ .Values.collectstatic.job_name }}
+      app.kubernetes.io/name: {{ .Values.collectstatic.job_name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: {{ .Values.collectstatic.job_name }}
+        app.kubernetes.io/name: {{ .Values.collectstatic.job_name }}
+        {{- range $key, $val := .Values.app.additionalLabels }}
+        {{ $key }}: {{ $val }}
+        {{- end}}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+    spec:
+      containers:
+      - args:
+        - echo asset upload complete;date; while true; do sleep 999999; done;
+        command:
+        - /bin/sh
+        - -c
+        - --
+        image: busybox:latest
+        imagePullPolicy: IfNotPresent
+        name: print-completion-time
+        resources:
+          limits:
+            cpu: 5m
+            memory: 500Mi
+          requests:
+            cpu: 5m
+            memory: 100Mi
+      initContainers:
+      - env:
+        - name: VAULT_ADDR
+          valueFrom:
+            configMapKeyRef:
+              key: VAULT_ADDR
+              name: app-cm
+        - name: VAULT_ROLE
+          valueFrom:
+            configMapKeyRef:
+              key: VAULT_ROLE
+              name: app-cm
+        - name: TOKEN_DEST_PATH
+          value: /vault-auth-secrets/secrets/.vault-token
+        - name: ACCESSOR_DEST_PATH
+          value: /vault-auth-secrets/secrets/.vault-accessor
+        image: edxops/vault-kubernetes-authenticator:latest
+        imagePullPolicy: IfNotPresent
+        name: vault-authenticator
+        volumeMounts:
+        - mountPath: /vault-auth-secrets/secrets
+          name: vault-auth-secrets
+      - command:
+        - /bin/sh
+        - -c
+        - |
+          set -xe
+          /bin/consul-template -config /app-cm/vault.hcl -template "/app-cm/{{ .Values.app.secret_file_name }}:/vault-api-secrets/secrets/{{ .Values.app.secret_file_name }}" -once
+          /bin/consul-template -config /app-cm/vault.hcl -template "/app-cm/secret.env:/vault-api-secrets/secrets/secret.env" -once
+        env:
+        - name: VAULT_ADDR
+          valueFrom:
+            configMapKeyRef:
+              key: VAULT_ADDR
+              name: app-cm
+        image: hashicorp/consul-template:0.20.0-light
+        imagePullPolicy: IfNotPresent
+        name: secret-render
+        volumeMounts:
+        - mountPath: /vault-auth-secrets/secrets
+          name: vault-auth-secrets
+          readOnly: true
+        - mountPath: /vault-api-secrets/secrets
+          name: vault-api-secrets
+        - mountPath: /app-cm
+          name: app-cm
+      - args:
+        - source /vault-api-secrets/secrets/secret.env && {{ .Values.collectstatic.command }}
+        command:
+        - /bin/bash
+        - -c
+        - --
+        env:
+        - name: {{  .Values.app.secret_file_env_name }}
+          value: /vault-api-secrets/secrets/{{ .Values.app.secret_file_name }}
+        - name: NEW_RELIC_APP_NAME
+          valueFrom:
+            configMapKeyRef:
+              key: NEW_RELIC_APP_NAME
+              name: app-cm
+        - name: NEW_RELIC_LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              key: NEW_RELIC_LOG_LEVEL
+              name: app-cm
+        - name: NEW_RELIC_LICENSE_KEY
+          value: Secret value filled in from secrets.env
+        {{- range $env := .Values.app.extraEnvs }}
+        - name: {{ $env.name }}
+          value: {{ $env.value }}
+        {{- end }}
+        image: {{  .Values.app.image.repository }}:{{  .Values.app.image.tag }}
+        imagePullPolicy: Always
+        name: run-collectstatic
+        resources:
+          limits:
+            cpu: 5m
+            memory: 500Mi
+          requests:
+            cpu: 5m
+            memory: 100Mi
+        volumeMounts:
+        - mountPath: /vault-api-secrets/secrets
+          name: vault-api-secrets
+          readOnly: true
+        - mountPath: /tmp/static
+          name: app-static
+          readOnly: false
+      - args:
+        - '[[ -n "${S3_ASSET_BUCKET}" ]] && aws s3 sync /tmp/static $S3_ASSET_BUCKET'
+        command:
+        - /bin/bash
+        - -c
+        - --
+        env:
+        - name: {{  .Values.app.secret_file_env_name }}
+          value: /vault-api-secrets/secrets/{{ .Values.app.secret_file_name }}
+        - name: NEW_RELIC_APP_NAME
+          valueFrom:
+            configMapKeyRef:
+              key: NEW_RELIC_APP_NAME
+              name: app-cm
+        - name: NEW_RELIC_LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              key: NEW_RELIC_LOG_LEVEL
+              name: app-cm
+        - name: NEW_RELIC_LICENSE_KEY
+          value: Secret value filled in from secrets.env
+        - name: S3_ASSET_BUCKET
+          valueFrom:
+            configMapKeyRef:
+              key: S3_ASSET_BUCKET
+              name: app-cm
+        {{- range $env := .Values.app.extraEnvs }}
+        - name: {{ $env.name }}
+          value: {{ $env.value }}
+        {{- end }}
+        image: 257477529851.dkr.ecr.us-east-1.amazonaws.com/k8s-cli-utils:latest
+        imagePullPolicy: IfNotPresent
+        name: s3-upload
+        volumeMounts:
+        - mountPath: /vault-api-secrets/secrets
+          name: vault-api-secrets
+          readOnly: true
+        - mountPath: /tmp/static
+          name: app-static
+          readOnly: true
+      securityContext:
+        fsGroup: 999
+        runAsGroup: 999
+        runAsUser: 999
+      serviceAccountName: {{ .Values.collectstatic.job_name }}
+      volumes:
+      - emptyDir:
+          medium: Memory
+        name: vault-auth-secrets
+      - emptyDir:
+          medium: Memory
+        name: vault-api-secrets
+      - configMap:
+          name: app-cm
+        name: app-cm
+      - emptyDir:
+          medium: Memory
+        name: app-static
+{{ end }}
