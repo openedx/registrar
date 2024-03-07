@@ -28,8 +28,9 @@ backoff==1.10.0
     # via
     #   -r requirements/base.txt
     #   analytics-python
-backports-zoneinfo==0.2.1
+backports-zoneinfo==0.2.1 ; python_version < "3.9"
     # via
+    #   -c requirements/constraints.txt
     #   -r requirements/base.txt
     #   django
 billiard==3.6.4.0

@@ -17,8 +17,10 @@ async-timeout==4.0.3
     # via redis
 backoff==1.10.0
     # via analytics-python
-backports-zoneinfo==0.2.1
-    # via django
+backports-zoneinfo==0.2.1 ; python_version < "3.9"
+    # via
+    #   -c requirements/constraints.txt
+    #   django
 billiard==3.6.4.0
     # via celery
 celery==4.4.7

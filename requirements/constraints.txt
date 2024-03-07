@@ -48,3 +48,7 @@ wrapt < 1.14.0
 
 # At the time of adding this, the moto version 4.1.9 requires urllib3<1.27,>=1.25.4
 urllib3<1.27,>=1.25.4
+
+# backports.zoneinfo needed for Python 3.9+ and Django 4.0+ compatibility
+# Can be removed once requirements have been upgraded with Python>=3.9
+backports.zoneinfo; python_version<'3.9'
