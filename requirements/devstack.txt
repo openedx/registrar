@@ -12,7 +12,7 @@ alabaster==0.7.13
     # via
     #   -r requirements/local.txt
     #   sphinx
-amqp==2.6.1
+amqp==5.2.0
     # via
     #   -r requirements/local.txt
     #   kombu
@@ -42,24 +42,26 @@ backoff==1.10.0
     # via
     #   -r requirements/local.txt
     #   analytics-python
-backports-zoneinfo==0.2.1
+backports-zoneinfo[tzdata]==0.2.1
     # via
     #   -r requirements/local.txt
+    #   celery
     #   django
+    #   kombu
 beautifulsoup4==4.12.3
     # via
     #   -r requirements/local.txt
     #   pydata-sphinx-theme
-billiard==3.6.4.0
+billiard==4.2.0
     # via
     #   -r requirements/local.txt
     #   celery
-boto3==1.34.60
+boto3==1.34.62
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/local.txt
     #   moto
-botocore==1.34.60
+botocore==1.34.62
     # via
     #   -r requirements/local.txt
     #   boto3
@@ -69,7 +71,7 @@ cachetools==5.3.3
     # via
     #   -r requirements/local.txt
     #   tox
-celery==4.4.7
+celery==5.3.6
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/local.txt
@@ -94,14 +96,30 @@ charset-normalizer==3.3.2
 click==8.1.7
     # via
     #   -r requirements/local.txt
+    #   celery
+    #   click-didyoumean
     #   click-log
+    #   click-plugins
+    #   click-repl
     #   code-annotations
     #   edx-django-utils
     #   edx-lint
+click-didyoumean==0.3.0
+    # via
+    #   -r requirements/local.txt
+    #   celery
 click-log==0.4.0
     # via
     #   -r requirements/local.txt
     #   edx-lint
+click-plugins==1.1.1
+    # via
+    #   -r requirements/local.txt
+    #   celery
+click-repl==0.3.0
+    # via
+    #   -r requirements/local.txt
+    #   celery
 code-annotations==1.6.0
     # via
     #   -c requirements/constraints.txt
@@ -251,7 +269,7 @@ exceptiongroup==1.2.0
     #   pytest
 factory-boy==3.3.0
     # via -r requirements/local.txt
-faker==24.1.0
+faker==24.2.0
     # via
     #   -r requirements/local.txt
     #   factory-boy
@@ -270,8 +288,9 @@ imagesize==1.4.1
     # via
     #   -r requirements/local.txt
     #   sphinx
-importlib-metadata==7.0.2
+importlib-metadata==6.11.0
     # via
+    #   -c requirements/common_constraints.txt
     #   -r requirements/local.txt
     #   sphinx
 inflection==0.5.1
@@ -297,7 +316,7 @@ jmespath==1.0.1
     #   -r requirements/local.txt
     #   boto3
     #   botocore
-kombu==4.6.11
+kombu==5.3.5
     # via
     #   -r requirements/local.txt
     #   celery
@@ -372,6 +391,10 @@ polib==1.2.0
     # via
     #   -r requirements/local.txt
     #   edx-i18n-tools
+prompt-toolkit==3.0.43
+    # via
+    #   -r requirements/local.txt
+    #   click-repl
 psutil==5.9.8
     # via
     #   -r requirements/local.txt
@@ -448,6 +471,7 @@ python-dateutil==2.9.0.post0
     #   -r requirements/local.txt
     #   analytics-python
     #   botocore
+    #   celery
     #   faker
     #   freezegun
     #   moto
@@ -467,7 +491,6 @@ pytz==2024.1
     # via
     #   -r requirements/local.txt
     #   babel
-    #   celery
     #   djangorestframework
     #   drf-yasg
 pywatchman==2.0.0
@@ -629,8 +652,14 @@ typing-extensions==4.10.0
     #   astroid
     #   edx-opaque-keys
     #   faker
+    #   kombu
     #   pydata-sphinx-theme
     #   pylint
+tzdata==2024.1
+    # via
+    #   -r requirements/local.txt
+    #   backports-zoneinfo
+    #   celery
 uritemplate==4.1.1
     # via
     #   -r requirements/local.txt
@@ -642,15 +671,20 @@ urllib3==1.26.18
     #   botocore
     #   requests
     #   responses
-vine==1.3.0
+vine==5.1.0
     # via
     #   -r requirements/local.txt
     #   amqp
     #   celery
+    #   kombu
 virtualenv==20.25.1
     # via
     #   -r requirements/local.txt
     #   tox
+wcwidth==0.2.13
+    # via
+    #   -r requirements/local.txt
+    #   prompt-toolkit
 werkzeug==3.0.1
     # via
     #   -r requirements/local.txt
@@ -661,7 +695,7 @@ xmltodict==0.13.0
     #   moto
 yamllint==1.35.1
     # via -r requirements/local.txt
-zipp==3.17.0
+zipp==3.18.0
     # via
     #   -r requirements/local.txt
     #   importlib-metadata

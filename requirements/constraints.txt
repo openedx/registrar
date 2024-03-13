@@ -21,7 +21,7 @@ django-extensions<3.2.0
 django-storages==1.10.1
 
 # From base.in
-celery<5.0  # version 5.0 drops support for python 3.5
+celery<6.0  # keeping the version same as edx-platform
 
 
 code-annotations>=0.3.1  # Pinned to avoid pyyaml security alerts. (https://github.com/openedx/registrar/pull/42)

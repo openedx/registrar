@@ -4,7 +4,7 @@
 #
 #    make upgrade
 #
-amqp==2.6.1
+amqp==5.2.0
     # via
     #   -r requirements/base.txt
     #   kombu
@@ -24,23 +24,25 @@ backoff==1.10.0
     # via
     #   -r requirements/base.txt
     #   analytics-python
-backports-zoneinfo==0.2.1
-    # via
-    #   -r requirements/base.txt
-    #   django
-billiard==3.6.4.0
+backports-zoneinfo[tzdata]==0.2.1
     # via
     #   -r requirements/base.txt
     #   celery
-boto3==1.34.60
+    #   django
+    #   kombu
+billiard==4.2.0
+    # via
+    #   -r requirements/base.txt
+    #   celery
+boto3==1.34.62
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/production.in
-botocore==1.34.60
+botocore==1.34.62
     # via
     #   boto3
     #   s3transfer
-celery==4.4.7
+celery==5.3.6
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.txt
@@ -61,7 +63,23 @@ charset-normalizer==3.3.2
 click==8.1.7
     # via
     #   -r requirements/base.txt
+    #   celery
+    #   click-didyoumean
+    #   click-plugins
+    #   click-repl
     #   edx-django-utils
+click-didyoumean==0.3.0
+    # via
+    #   -r requirements/base.txt
+    #   celery
+click-plugins==1.1.1
+    # via
+    #   -r requirements/base.txt
+    #   celery
+click-repl==0.3.0
+    # via
+    #   -r requirements/base.txt
+    #   celery
 cryptography==42.0.5
     # via
     #   -r requirements/base.txt
@@ -180,7 +198,7 @@ jmespath==1.0.1
     # via
     #   boto3
     #   botocore
-kombu==4.6.11
+kombu==5.3.5
     # via
     #   -r requirements/base.txt
     #   celery
@@ -211,6 +229,10 @@ pbr==6.0.0
     # via
     #   -r requirements/base.txt
     #   stevedore
+prompt-toolkit==3.0.43
+    # via
+    #   -r requirements/base.txt
+    #   click-repl
 psutil==5.9.8
     # via
     #   -r requirements/base.txt
@@ -242,6 +264,7 @@ python-dateutil==2.9.0.post0
     #   -r requirements/base.txt
     #   analytics-python
     #   botocore
+    #   celery
 python-memcached==1.62
     # via -r requirements/nonlocal.txt
 python-slugify==4.0.1
@@ -255,7 +278,6 @@ python3-openid==3.2.0
 pytz==2024.1
     # via
     #   -r requirements/base.txt
-    #   celery
     #   djangorestframework
     #   drf-yasg
 pyyaml==6.0.1
@@ -323,6 +345,12 @@ typing-extensions==4.10.0
     #   -r requirements/base.txt
     #   asgiref
     #   edx-opaque-keys
+    #   kombu
+tzdata==2024.1
+    # via
+    #   -r requirements/base.txt
+    #   backports-zoneinfo
+    #   celery
 uritemplate==4.1.1
     # via
     #   -r requirements/base.txt
@@ -333,11 +361,16 @@ urllib3==1.26.18
     #   -r requirements/base.txt
     #   botocore
     #   requests
-vine==1.3.0
+vine==5.1.0
     # via
     #   -r requirements/base.txt
     #   amqp
     #   celery
+    #   kombu
+wcwidth==0.2.13
+    # via
+    #   -r requirements/base.txt
+    #   prompt-toolkit
 zope-event==5.0
     # via gevent
 zope-interface==6.2
