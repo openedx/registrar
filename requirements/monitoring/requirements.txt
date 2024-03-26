@@ -27,7 +27,7 @@ analytics-python==1.4.post1
     #   -r requirements/monitoring/../local.txt
     #   -r requirements/monitoring/../production.txt
     #   -r requirements/monitoring/../test.txt
-asgiref==3.7.2
+asgiref==3.8.1
     # via
     #   -r requirements/monitoring/../devstack.txt
     #   -r requirements/monitoring/../local.txt
@@ -70,6 +70,7 @@ backports-zoneinfo==0.2.1
     #   -r requirements/monitoring/../production.txt
     #   -r requirements/monitoring/../test.txt
     #   django
+    #   djangorestframework
 beautifulsoup4==4.12.3
     # via
     #   -r requirements/monitoring/../devstack.txt
@@ -82,14 +83,14 @@ billiard==3.6.4.0
     #   -r requirements/monitoring/../production.txt
     #   -r requirements/monitoring/../test.txt
     #   celery
-boto3==1.34.60
+boto3==1.34.70
     # via
     #   -r requirements/monitoring/../devstack.txt
     #   -r requirements/monitoring/../local.txt
     #   -r requirements/monitoring/../production.txt
     #   -r requirements/monitoring/../test.txt
     #   moto
-botocore==1.34.60
+botocore==1.34.70
     # via
     #   -r requirements/monitoring/../devstack.txt
     #   -r requirements/monitoring/../local.txt
@@ -155,7 +156,7 @@ click-log==0.4.0
     #   -r requirements/monitoring/../local.txt
     #   -r requirements/monitoring/../test.txt
     #   edx-lint
-code-annotations==1.6.0
+code-annotations==1.7.0
     # via
     #   -r requirements/monitoring/../devstack.txt
     #   -r requirements/monitoring/../local.txt
@@ -172,7 +173,7 @@ configobj==5.0.8
     #   -r requirements/monitoring/../devstack.txt
     #   -r requirements/monitoring/../local.txt
     #   ruamel-yaml-cmd
-coverage[toml]==7.4.3
+coverage[toml]==7.4.4
     # via
     #   -r requirements/monitoring/../devstack.txt
     #   -r requirements/monitoring/../local.txt
@@ -311,7 +312,7 @@ django-waffle==4.1.0
     #   -r requirements/monitoring/../test.txt
     #   edx-django-utils
     #   edx-drf-extensions
-djangorestframework==3.14.0
+djangorestframework==3.15.1
     # via
     #   -r requirements/monitoring/../devstack.txt
     #   -r requirements/monitoring/../local.txt
@@ -408,13 +409,13 @@ factory-boy==3.3.0
     #   -r requirements/monitoring/../devstack.txt
     #   -r requirements/monitoring/../local.txt
     #   -r requirements/monitoring/../test.txt
-faker==24.1.0
+faker==24.4.0
     # via
     #   -r requirements/monitoring/../devstack.txt
     #   -r requirements/monitoring/../local.txt
     #   -r requirements/monitoring/../test.txt
     #   factory-boy
-filelock==3.13.1
+filelock==3.13.3
     # via
     #   -r requirements/monitoring/../devstack.txt
     #   -r requirements/monitoring/../local.txt
@@ -446,7 +447,7 @@ imagesize==1.4.1
     #   -r requirements/monitoring/../devstack.txt
     #   -r requirements/monitoring/../local.txt
     #   sphinx
-importlib-metadata==7.0.2
+importlib-metadata==6.11.0
     # via
     #   -r requirements/monitoring/../devstack.txt
     #   -r requirements/monitoring/../local.txt
@@ -700,7 +701,7 @@ pytest==8.1.1
     #   -r requirements/monitoring/../test.txt
     #   pytest-cov
     #   pytest-django
-pytest-cov==4.1.0
+pytest-cov==5.0.0
     # via
     #   -r requirements/monitoring/../devstack.txt
     #   -r requirements/monitoring/../local.txt
@@ -748,7 +749,6 @@ pytz==2024.1
     #   -r requirements/monitoring/../test.txt
     #   babel
     #   celery
-    #   djangorestframework
     #   drf-yasg
 pywatchman==2.0.0
     # via
@@ -786,7 +786,7 @@ requests==2.31.0
     #   slumber
     #   social-auth-core
     #   sphinx
-requests-oauthlib==1.4.0
+requests-oauthlib==2.0.0
     # via
     #   -r requirements/monitoring/../devstack.txt
     #   -r requirements/monitoring/../local.txt
@@ -825,7 +825,7 @@ ruamel-yaml-convert==0.3.2
     #   -r requirements/monitoring/../devstack.txt
     #   -r requirements/monitoring/../local.txt
     #   ruamel-yaml-cmd
-s3transfer==0.10.0
+s3transfer==0.10.1
     # via
     #   -r requirements/monitoring/../devstack.txt
     #   -r requirements/monitoring/../local.txt
@@ -964,7 +964,7 @@ tomlkit==0.12.4
     #   -r requirements/monitoring/../local.txt
     #   -r requirements/monitoring/../test.txt
     #   pylint
-tox==4.14.1
+tox==4.14.2
     # via
     #   -r requirements/monitoring/../devstack.txt
     #   -r requirements/monitoring/../local.txt
@@ -1028,7 +1028,7 @@ yamllint==1.35.1
     #   -r requirements/monitoring/../devstack.txt
     #   -r requirements/monitoring/../local.txt
     #   -r requirements/monitoring/../test.txt
-zipp==3.17.0
+zipp==3.18.1
     # via
     #   -r requirements/monitoring/../devstack.txt
     #   -r requirements/monitoring/../local.txt
