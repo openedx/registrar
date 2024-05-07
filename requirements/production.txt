@@ -24,7 +24,7 @@ backoff==1.10.0
     # via
     #   -r requirements/base.txt
     #   analytics-python
-backports-zoneinfo[tzdata]==0.2.1
+backports-zoneinfo[tzdata]==0.2.1 ; python_version < "3.9"
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.txt
@@ -36,11 +36,11 @@ billiard==4.2.0
     # via
     #   -r requirements/base.txt
     #   celery
-boto3==1.34.94
+boto3==1.34.99
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/production.in
-botocore==1.34.94
+botocore==1.34.99
     # via
     #   boto3
     #   s3transfer
@@ -82,7 +82,7 @@ click-repl==0.3.0
     # via
     #   -r requirements/base.txt
     #   celery
-cryptography==42.0.5
+cryptography==42.0.7
     # via
     #   -r requirements/base.txt
     #   pyjwt
@@ -92,7 +92,7 @@ defusedxml==0.8.0rc2
     #   -r requirements/base.txt
     #   python3-openid
     #   social-auth-core
-django==4.2.11
+django==4.2.12
     # via
     #   -c requirements/common_constraints.txt
     #   -r requirements/base.txt
@@ -126,7 +126,7 @@ django-extensions==3.1.5
     #   -r requirements/base.txt
 django-guardian==2.4.0
     # via -r requirements/base.txt
-django-model-utils==4.5.0
+django-model-utils==4.5.1
     # via
     #   -r requirements/base.txt
     #   django-user-tasks

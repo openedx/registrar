@@ -33,7 +33,7 @@ async-timeout==4.0.3
     # via
     #   -r requirements/local.txt
     #   redis
-babel==2.14.0
+babel==2.15.0
     # via
     #   -r requirements/local.txt
     #   pydata-sphinx-theme
@@ -42,7 +42,7 @@ backoff==1.10.0
     # via
     #   -r requirements/local.txt
     #   analytics-python
-backports-zoneinfo[tzdata]==0.2.1
+backports-zoneinfo[tzdata]==0.2.1 ; python_version < "3.9"
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/local.txt
@@ -58,12 +58,12 @@ billiard==4.2.0
     # via
     #   -r requirements/local.txt
     #   celery
-boto3==1.34.94
+boto3==1.34.99
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/local.txt
     #   moto
-botocore==1.34.94
+botocore==1.34.99
     # via
     #   -r requirements/local.txt
     #   boto3
@@ -135,11 +135,11 @@ configobj==5.0.8
     # via
     #   -r requirements/local.txt
     #   ruamel-yaml-cmd
-coverage[toml]==7.5.0
+coverage[toml]==7.5.1
     # via
     #   -r requirements/local.txt
     #   pytest-cov
-cryptography==42.0.5
+cryptography==42.0.7
     # via
     #   -r requirements/local.txt
     #   moto
@@ -160,7 +160,7 @@ distlib==0.3.8
     # via
     #   -r requirements/local.txt
     #   virtualenv
-django==4.2.11
+django==4.2.12
     # via
     #   -c requirements/common_constraints.txt
     #   -r requirements/local.txt
@@ -200,7 +200,7 @@ django-extensions==3.1.5
     #   -r requirements/local.txt
 django-guardian==2.4.0
     # via -r requirements/local.txt
-django-model-utils==4.5.0
+django-model-utils==4.5.1
     # via
     #   -r requirements/local.txt
     #   django-user-tasks
@@ -274,7 +274,7 @@ exceptiongroup==1.2.1
     #   pytest
 factory-boy==3.3.0
     # via -r requirements/local.txt
-faker==25.0.0
+faker==25.0.1
     # via
     #   -r requirements/local.txt
     #   factory-boy
@@ -310,7 +310,7 @@ isort[requirements]==5.13.2
     # via
     #   -r requirements/local.txt
     #   pylint
-jinja2==3.1.3
+jinja2==3.1.4
     # via
     #   -r requirements/local.txt
     #   code-annotations
@@ -419,7 +419,7 @@ pydata-sphinx-theme==0.14.4
     # via
     #   -r requirements/local.txt
     #   sphinx-book-theme
-pygments==2.17.2
+pygments==2.18.0
     # via
     #   -r requirements/local.txt
     #   accessible-pygments
@@ -693,7 +693,7 @@ wcwidth==0.2.13
     # via
     #   -r requirements/local.txt
     #   prompt-toolkit
-werkzeug==3.0.2
+werkzeug==3.0.3
     # via
     #   -r requirements/local.txt
     #   moto
