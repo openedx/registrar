@@ -1,0 +1,6 @@
+dependencies:
+- name: django-ida
+  repository: https://25c38c15078aaa07ab0119be78db03b720b5e014@raw.githubusercontent.com/edx/helm-repo/master/
+  version: 0.8.16
+digest: sha256:0e92ca10d7d40f4c92e8515b0db1c0ba1c6bcc2a43a5863bcbbf7ff75cab9679
+generated: "2023-10-30T14:08:00.791802-04:00"

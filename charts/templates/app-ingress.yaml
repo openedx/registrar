@@ -1,0 +1,68 @@
+{{- range $index, $ingress := .Values.ingresses }}
+{{- with $ }}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: {{ $ingress.issuer }}
+    kubernetes.io/tls-acme: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+  {{- if $ingress.external_dns }}
+    kubernetes.io/external-dns: "true"
+  {{- end }}
+  {{- if $ingress.external_dns_cloudflare }}
+    kubernetes.io/external-dns-cloudflare: "true"
+  {{- end }}
+  {{- if hasKey $ingress "client-max-body-size" }}
+    nginx.ingress.kubernetes.io/proxy-body-size: {{ index $ingress "client-max-body-size" }}
+  {{- end }}
+    nginx.ingress.kubernetes.io/configuration-snippet: |-
+    {{- if .Values.newrelic.enabled }}
+      proxy_set_header X-Queue-Start "t=${msec}";
+    {{- end }}
+    {{- if $ingress.allow_django_admin }}
+    {{- else }}
+      server_tokens off;
+      location /admin {
+        deny all;
+        return 403;
+      }
+    {{- end }}
+  labels:
+    app.kubernetes.io/instance: {{ $.Values.app.name }}
+    app.kubernetes.io/name: {{ $.Values.app.name }}
+    {{- range $key, $val := .Values.app.additionalLabels }}
+    {{ $key }}: {{ $val }}
+    {{- end}}
+  {{- /*
+  Append truncated sha256 of hostname in case we have mutliple ingresses of the same className
+  */}}
+  name: {{ $.Values.app.name }}-{{ $ingress.className }}-{{ $ingress.host | sha256sum | trunc 5 }}
+spec:
+  ingressClassName: {{ $ingress.className }}
+  rules:
+  - host: {{ $ingress.host }}
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: {{ $.Values.app.name }}
+              port:
+                name: http
+  tls:
+  - hosts:
+    - {{ $ingress.host }}
+  {{- if $ingress.extra_tls_hosts }}
+  {{- range $ingress.extra_tls_hosts }}
+    - {{ . }}
+  {{- end }}
+  {{- end }}
+  {{- /*
+  Append truncated sha256 of hostname in case we have mutliple ingresses of the same className
+  */}}
+    secretName: {{ $.Values.app.name }}-tls-{{ $ingress.className }}-{{ $ingress.host | sha256sum | trunc 5 }}
+{{- end }}
+{{- end }}

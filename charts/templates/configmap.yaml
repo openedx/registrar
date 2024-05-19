@@ -1,0 +1,47 @@
+---
+kind: ConfigMap
+metadata:
+  annotations: {}
+  labels: {}
+  name: app-cm
+apiVersion: v1
+data:
+  {{- if .Values.app.migrations.enabled }}
+  {{ .Values.app.migrations.migrate_db_user_env_name }}: {{ .Values.app.migrations.database_migrate_user }}
+  {{- end }}
+  NEW_RELIC_APP_NAME: {{ .Values.newrelic.app_name }}
+  NEW_RELIC_LOG_LEVEL: {{ .Values.newrelic.log_level }}
+  S3_ASSET_BUCKET: {{ .Values.collectstatic.s3_bucket }}
+  VAULT_ADDR: {{ .Values.vault.vault_addr }}
+  VAULT_ROLE: {{ .Values.vault.vault_role }}
+  {{ .Values.app.secret_file_name }}: |
+    ---
+    {{"{{"}} with secret "{{ .Values.vault.secret_name }}?version={{ .Values.vault.secret_version }}" {{"}}"}}
+{{ toYaml .Values.app.config | indent 4}}
+    {{"{{"}} end {{"}}"}}
+  migrate.env: |+
+    #!/bin/bash
+    {{"{{"}} with secret "{{ .Values.vault.secret_name }}?version={{ .Values.vault.secret_version }}" {{"}}"}}
+    export {{ .Values.app.migrations.migrate_db_pass_env_name }}={{"$'{{"}} .Data.data.{{ .Values.app.migrations.migrate_db_pass_env_name }} | replaceAll "\\" "\\\\" | replaceAll "'" "\\'" {{"}}'"}}
+    {{"{{"}} end {{"}}"}}
+
+  secret.env: |
+    #!/bin/bash
+    export NEW_RELIC_LICENSE_KEY={{"{{"}} with secret "{{ .Values.vault.secret_name }}?version={{ .Values.vault.secret_version }}" {{"}}"}}{{"{{"}} .Data.data.NEW_RELIC_LICENSE_KEY {{"}}"}}{{"{{"}} end {{"}}"}}
+{{ if .Values.vault.use_tls }}
+  vault.hcl: |
+    "vault" = {
+      "vault_agent_token_file" = "/vault-auth-secrets/secrets/.vault-token"
+        ssl {
+          enabled = true
+          verify = true
+          ca_cert = "/etc/ssl/cert.pem"
+        }
+    }
+{{ else }}
+  vault.hcl: |
+    "vault" = {
+      "vault_agent_token_file" = "/vault-auth-secrets/secrets/.vault-token"
+    }
+{{ end }}
+

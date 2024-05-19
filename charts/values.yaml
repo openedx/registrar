@@ -1,0 +1,130 @@
+registrar:
+  app: 
+    name: registrar
+    role_arn: arn:aws:iam::708756755355:role/development-edx-registrar
+    command: 'gunicorn --workers=2 --name registrar -c /edx/app/registrar/registrar/docker_gunicorn_configuration.py --log-file - --max-requests=1000 registrar.wsgi:application'
+    
+    port: 18734
+    
+    secret_file_env_name: REGISTRAR_CFG
+    secret_file_name: registrar.yml
+    service_account_name: registrar
+    migrations:
+      name: registrar-migrations
+      enabled: true
+      database_migrate_user: db-user
+
+    autoscaling:
+      enabled: false
+      minReplicas: 3
+      maxReplicas: 10
+      targetCPUUtilizationPercentage: 50
+        
+    health_check:
+      liveness_probe_initial_delay_seconds: 30
+      readiness_probe_initial_delay_seconds: 30
+    
+    # FILL-ME-IN
+    config:
+      API_ROOT: https://api.development.edx.org/registrar
+      BACKEND_SERVICE_EDX_OAUTH2_KEY: '{{ .Data.data.BACKEND_SERVICE_EDX_OAUTH2_KEY }}'
+      BACKEND_SERVICE_EDX_OAUTH2_PROVIDER_URL: https://courses.development.edx.org/oauth2
+      BACKEND_SERVICE_EDX_OAUTH2_SECRET: '{{ .Data.data.BACKEND_SERVICE_EDX_OAUTH2_SECRET}}'
+      CACHES:
+        default:
+          BACKEND: django.core.cache.backends.memcached.MemcachedCache
+          KEY_PREFIX: registrar
+          LOCATION:
+          - development-edx-registrar.6sxrym.0001.use1.cache.amazonaws.com
+          - development-edx-registrar.6sxrym.0002.use1.cache.amazonaws.com
+      CELERY_ALWAYS_EAGER: false
+      CELERY_BROKER_HOSTNAME: edx-development-queues.6sxrym.ng.0001.use1.cache.amazonaws.com:6379
+      CELERY_BROKER_PASSWORD: ''
+      CELERY_BROKER_TRANSPORT: redis
+      CELERY_BROKER_USER: ''
+      CELERY_BROKER_VHOST: 0
+      CELERY_DEFAULT_EXCHANGE: registrar
+      CELERY_DEFAULT_QUEUE: registrar.default
+      CELERY_DEFAULT_ROUTING_KEY: registrar
+      CORS_ORIGIN_WHITELIST:
+      - https://development-edx-registrar.edx.org
+      - https://registrar.development.edx.org
+      - https://program-console.development.edx.org
+      CSRF_COOKIE_SECURE: true
+      CSRF_TRUSTED_ORIGINS:
+      - .edx.org
+      CSRF_TRUSTED_ORIGINS_WITH_SCHEMES:
+      - https://*.edx.org
+      DATABASES:
+        default:
+          ATOMIC_REQUESTS: false
+          CONN_MAX_AGE: 60
+          ENGINE: django.db.backends.mysql
+          HOST: mysql.mysql
+          NAME: db
+          OPTIONS:
+            connect_timeout: 10
+            init_command: SET sql_mode='STRICT_TRANS_TABLES'
+          PASSWORD: '{{ .Data.data.DATABASE_DEFAULT_PASSWORD }}'
+          PORT: '3306'
+          USER: db-user
+      DISCOVERY_BASE_URL: https://discovery.development.edx.org
+      EDX_DRF_EXTENSIONS:
+        OAUTH2_USER_INFO_URL: https://courses.development.edx.org/oauth2/user_info
+      JWT_AUTH:
+        JWT_AUTH_COOKIE_HEADER_PAYLOAD: development-edx-jwt-cookie-header-payload
+        JWT_AUTH_COOKIE_SIGNATURE: development-edx-jwt-cookie-signature
+        JWT_ISSUERS:
+        - AUDIENCE: '{{ .Data.data.JWT_ISSUERS_0_AUDIENCE }}'
+          ISSUER: https://courses.development.edx.org/oauth2
+          SECRET_KEY: '{{ .Data.data.JWT_ISSUERS_0_SECRET_KEY }}'
+        JWT_PUBLIC_SIGNING_JWK_SET: '{"keys": [{"n": "hcm7899L5XQ6AVNYwNo3Yu-rx47f0FMAN3am6WgurbDulrcCIfhyTivzpnuOY0W-2tntlR51j4hHzywSSCqdOgG1MZLfVSJwVpVUhd9ROLuIRbifXyRJ1_d7C_L3YZdyYqFY7k8W5f62UqCePxVCh-zCKtkfjCJkhRujgDw4YeL63j80We48T0LYK5ZSRBOEj2N4fjbzsi9T2d1qCBaLvXwgYzMnUTc8mch6JMP8HWsrgqV4kkPyP3il_IgRARV5BF5cdJbUg2-__5QirmLF16xl9j0vo9yLyBnqlYZXWYjFOECI7FatHLGQDT5TopXWT4YF82_aZSNuIQUoDY8hDQ",
+          "kty": "RSA", "e": "AQAB", "kid": "lmsdevelopment002"}]}'
+      LMS_BASE_URL: https://courses.development.edx.org
+      MEDIA_STORAGE_BACKEND:
+        AWS_DEFAULT_ACL: null
+        AWS_LOCATION: ''
+        AWS_QUERYSTRING_AUTH: true
+        AWS_QUERYSTRING_EXPIRE: 3600
+        DEFAULT_FILE_STORAGE: storages.backends.s3boto3.S3Boto3Storage
+        REGISTRAR_BUCKET: development-edx-registrar
+        PROGRAM_REPORTS_BUCKET: development-edx-program-reports
+      REGISTRAR_SERVICE_USER: registrar_service_user
+      SECRET_KEY: '{{ .Data.data.SECRET_KEY }}'
+      SEGMENT_KEY: '{{ .Data.data.SEGMENT_KEY }}'
+      SESSION_COOKIE_SECURE: true
+      SOCIAL_AUTH_EDX_OAUTH2_ISSUER: https://courses.development.edx.org
+      SOCIAL_AUTH_EDX_OAUTH2_KEY: '{{ .Data.data.SOCIAL_AUTH_EDX_OAUTH2_KEY }}'
+      SOCIAL_AUTH_EDX_OAUTH2_LOGOUT_URL: https://courses.development.edx.org/logout
+      SOCIAL_AUTH_EDX_OAUTH2_SECRET: '{{ .Data.data.SOCIAL_AUTH_EDX_OAUTH2_SECRET }}'
+      SOCIAL_AUTH_EDX_OAUTH2_URL_ROOT: https://courses.development.edx.org
+      STATIC_ROOT: /tmp/static
+
+  workers: []
+  # - name: registrar-worker
+  #     command: celery -A registrar worker --loglevel info
+  #     minReplicas: 3
+  #     maxReplicas: 6
+  #     targetCPUUtilizationPercentage: 100
+
+  newrelic:
+    enabled: false
+    app_name: development-edx-registrar
+    log_level: info
+
+  collectstatic:
+    enabled: false
+      
+  vault:
+    enabled: true
+    vault_role: registrar
+    vault_addr: http://development-vault.vault:8200
+    secret_name: kv/registrar
+    secret_version: 1
+
+  ingresses:
+    - host: registrar-eks.development.edx.org
+      class: nginx
+      issuer: selfsigning-issuer
+
+  cronjobs: []
