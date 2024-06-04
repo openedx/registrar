@@ -11,9 +11,6 @@
 # Common constraints for edx repos
 -c common_constraints.txt
 
-# This constraint can be removed once global constraint is updated.
-Django<4.3
-
 # Version 3.2.0 contains bad arabic translations that will cause validation tests to fail
 django-extensions<3.2.0
 
@@ -48,3 +45,7 @@ wrapt < 1.14.0
 
 # At the time of adding this, the moto version 4.1.9 requires urllib3<1.27,>=1.25.4
 urllib3<1.27,>=1.25.4
+
+# backports.zoneinfo needed for Python 3.12 + Django 4.2 compatibility
+# Can be removed once requirements have been upgraded with Python>=3.9
+backports.zoneinfo; python_version<'3.9'

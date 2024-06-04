@@ -17,8 +17,9 @@ async-timeout==4.0.3
     # via redis
 backoff==1.10.0
     # via analytics-python
-backports-zoneinfo[tzdata]==0.2.1
+backports-zoneinfo[tzdata]==0.2.1 ; python_version < "3.9"
     # via
+    #   -c requirements/constraints.txt
     #   celery
     #   django
     #   djangorestframework
@@ -51,7 +52,7 @@ click-plugins==1.1.1
     # via celery
 click-repl==0.3.0
     # via celery
-cryptography==42.0.5
+cryptography==42.0.7
     # via
     #   pyjwt
     #   social-auth-core
@@ -59,10 +60,9 @@ defusedxml==0.8.0rc2
     # via
     #   python3-openid
     #   social-auth-core
-django==4.2.11
+django==4.2.12
     # via
     #   -c requirements/common_constraints.txt
-    #   -c requirements/constraints.txt
     #   -r requirements/base.in
     #   django-cors-headers
     #   django-crum
@@ -92,7 +92,7 @@ django-extensions==3.1.5
     #   -r requirements/base.in
 django-guardian==2.4.0
     # via -r requirements/base.in
-django-model-utils==4.5.0
+django-model-utils==4.5.1
     # via
     #   -r requirements/base.in
     #   django-user-tasks

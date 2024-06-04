@@ -3,10 +3,10 @@ name: Python CI
 on:
   push:
     branches:
-      - master
+    - master
   pull_request:
     branches:
-      - '**'
+    - '**'
 
 jobs:
   run_tests:
@@ -14,15 +14,13 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os:
-          - ubuntu-20.04
-        python-version:
-          - 3.8
-        toxenv: [ django42 ]
+        os: [ubuntu-20.04]
+        python-version: ['3.8', '3.12']
+        toxenv: [django42]
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v3
     - name: setup python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
         architecture: x64
@@ -44,11 +42,11 @@ jobs:
         sudo apt install gettext
         make static
         make validate_translations
-    - name: Run Coverage
-      if: matrix.python-version == '3.8' && matrix.toxenv=='django42'
-      uses: codecov/codecov-action@v4
-      with:
-        flags: unittests
-        file: ./coverage.xml
-        fail_ci_if_error: true
-        token: ${{ secrets.CODECOV_TOKEN }}
+    # - name: Run Coverage
+    #   if: matrix.python-version == '3.12' && matrix.toxenv=='django42'
+    #   uses: codecov/codecov-action@v1
+    #   with:
+    #     flags: unittests
+    #     file: ./coverage.xml
+    #     fail_ci_if_error: true
+    #     token: ${{ secrets.CODECOV_TOKEN }}

@@ -28,8 +28,9 @@ backoff==1.10.0
     # via
     #   -r requirements/base.txt
     #   analytics-python
-backports-zoneinfo[tzdata]==0.2.1
+backports-zoneinfo[tzdata]==0.2.1 ; python_version < "3.9"
     # via
+    #   -c requirements/constraints.txt
     #   -r requirements/base.txt
     #   celery
     #   django
@@ -39,11 +40,11 @@ billiard==4.2.0
     # via
     #   -r requirements/base.txt
     #   celery
-boto3==1.34.94
+boto3==1.34.99
     # via
     #   -c requirements/constraints.txt
     #   moto
-botocore==1.34.94
+botocore==1.34.99
     # via
     #   boto3
     #   moto
@@ -102,11 +103,11 @@ code-annotations==1.8.0
     #   edx-lint
 colorama==0.4.6
     # via tox
-coverage[toml]==7.5.0
+coverage[toml]==7.5.1
     # via
     #   -r requirements/test.in
     #   pytest-cov
-cryptography==42.0.5
+cryptography==42.0.7
     # via
     #   -r requirements/base.txt
     #   moto
@@ -125,7 +126,6 @@ distlib==0.3.8
     # via virtualenv
     # via
     #   -c requirements/common_constraints.txt
-    #   -c requirements/constraints.txt
     #   -r requirements/base.txt
     #   django-cors-headers
     #   django-crum
@@ -159,7 +159,7 @@ django-extensions==3.1.5
     #   -r requirements/base.txt
 django-guardian==2.4.0
     # via -r requirements/base.txt
-django-model-utils==4.5.0
+django-model-utils==4.5.1
     # via
     #   -r requirements/base.txt
     #   django-user-tasks
@@ -224,7 +224,7 @@ exceptiongroup==1.2.1
     # via pytest
 factory-boy==3.3.0
     # via -r requirements/test.in
-faker==25.0.0
+faker==25.0.1
     # via
     #   -r requirements/test.in
     #   factory-boy
@@ -248,7 +248,7 @@ isort[requirements]==5.13.2
     # via
     #   -r requirements/test.in
     #   pylint
-jinja2==3.1.3
+jinja2==3.1.4
     # via
     #   code-annotations
     #   moto
@@ -499,7 +499,7 @@ wcwidth==0.2.13
     # via
     #   -r requirements/base.txt
     #   prompt-toolkit
-werkzeug==3.0.2
+werkzeug==3.0.3
     # via moto
 xmltodict==0.13.0
     # via moto
