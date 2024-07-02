@@ -56,12 +56,12 @@ billiard==4.2.0
     # via
     #   -r requirements/local.txt
     #   celery
-boto3==1.34.132
+boto3==1.34.137
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/local.txt
     #   moto
-botocore==1.34.132
+botocore==1.34.137
     # via
     #   -r requirements/local.txt
     #   boto3
@@ -274,7 +274,7 @@ exceptiongroup==1.2.1
     #   pytest
 factory-boy==3.3.0
     # via -r requirements/local.txt
-faker==25.9.1
+faker==26.0.0
     # via
     #   -r requirements/local.txt
     #   factory-boy
@@ -351,7 +351,7 @@ monotonic==1.6
     # via
     #   -r requirements/local.txt
     #   analytics-python
-moto==5.0.9
+moto==5.0.10
     # via -r requirements/local.txt
 mysqlclient==2.2.4
     # via -r requirements/nonlocal.txt
@@ -433,7 +433,7 @@ pyjwt[crypto]==2.8.0
     #   edx-drf-extensions
     #   edx-rest-api-client
     #   social-auth-core
-pylint==3.2.3
+pylint==3.2.5
     # via
     #   -r requirements/local.txt
     #   edx-lint
@@ -455,7 +455,7 @@ pylint-plugin-utils==0.8.2
     #   pylint-django
 pymemcache==4.0.0
     # via -r requirements/nonlocal.txt
-pymongo==4.7.3
+pymongo==4.8.0
     # via
     #   -r requirements/local.txt
     #   edx-opaque-keys
@@ -512,7 +512,7 @@ pyyaml==6.0.1
     #   edx-django-release-util
     #   edx-i18n-tools
     #   yamllint
-redis==5.0.6
+redis==5.0.7
     # via -r requirements/local.txt
 requests==2.32.3
     # via

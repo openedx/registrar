@@ -64,12 +64,12 @@ billiard==4.2.0
     #   -r requirements/docs.txt
     #   -r requirements/test.txt
     #   celery
-boto3==1.34.132
+boto3==1.34.137
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/test.txt
     #   moto
-botocore==1.34.132
+botocore==1.34.137
     # via
     #   -r requirements/test.txt
     #   boto3
@@ -322,7 +322,7 @@ exceptiongroup==1.2.1
     #   pytest
 factory-boy==3.3.0
     # via -r requirements/test.txt
-faker==25.9.1
+faker==26.0.0
     # via
     #   -r requirements/test.txt
     #   factory-boy
@@ -400,7 +400,7 @@ monotonic==1.6
     #   -r requirements/docs.txt
     #   -r requirements/test.txt
     #   analytics-python
-moto==5.0.9
+moto==5.0.10
     # via -r requirements/test.txt
 newrelic==5.24.0.153
     # via
@@ -484,7 +484,7 @@ pyjwt[crypto]==2.8.0
     #   edx-drf-extensions
     #   edx-rest-api-client
     #   social-auth-core
-pylint==3.2.3
+pylint==3.2.5
     # via
     #   -r requirements/test.txt
     #   edx-lint
@@ -504,7 +504,7 @@ pylint-plugin-utils==0.8.2
     #   -r requirements/test.txt
     #   pylint-celery
     #   pylint-django
-pymongo==4.7.3
+pymongo==4.8.0
     # via
     #   -r requirements/docs.txt
     #   -r requirements/test.txt
@@ -566,7 +566,7 @@ pyyaml==6.0.1
     #   edx-django-release-util
     #   edx-i18n-tools
     #   yamllint
-redis==5.0.6
+redis==5.0.7
     # via
     #   -r requirements/docs.txt
     #   -r requirements/test.txt
