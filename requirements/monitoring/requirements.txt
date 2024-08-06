@@ -67,14 +67,14 @@ billiard==4.2.0
     #   -r requirements/monitoring/../production.txt
     #   -r requirements/monitoring/../test.txt
     #   celery
-boto3==1.34.150
+boto3==1.34.154
     # via
     #   -r requirements/monitoring/../devstack.txt
     #   -r requirements/monitoring/../local.txt
     #   -r requirements/monitoring/../production.txt
     #   -r requirements/monitoring/../test.txt
     #   moto
-botocore==1.34.150
+botocore==1.34.154
     # via
     #   -r requirements/monitoring/../devstack.txt
     #   -r requirements/monitoring/../local.txt
@@ -182,7 +182,7 @@ configobj==5.0.8
     #   -r requirements/monitoring/../devstack.txt
     #   -r requirements/monitoring/../local.txt
     #   ruamel-yaml-cmd
-coverage[toml]==7.6.0
+coverage[toml]==7.6.1
     # via
     #   -r requirements/monitoring/../devstack.txt
     #   -r requirements/monitoring/../local.txt
@@ -222,7 +222,7 @@ distlib==0.3.8
     #   -r requirements/monitoring/../local.txt
     #   -r requirements/monitoring/../test.txt
     #   virtualenv
-django==4.2.14
+django==4.2.15
     # via
     #   -r requirements/monitoring/../devstack.txt
     #   -r requirements/monitoring/../local.txt
@@ -379,7 +379,7 @@ edx-django-release-util==1.4.0
     #   -r requirements/monitoring/../local.txt
     #   -r requirements/monitoring/../production.txt
     #   -r requirements/monitoring/../test.txt
-edx-django-utils==5.14.2
+edx-django-utils==5.15.0
     # via
     #   -r requirements/monitoring/../devstack.txt
     #   -r requirements/monitoring/../local.txt
@@ -393,7 +393,7 @@ edx-drf-extensions==10.3.0
     #   -r requirements/monitoring/../local.txt
     #   -r requirements/monitoring/../production.txt
     #   -r requirements/monitoring/../test.txt
-edx-i18n-tools==1.6.1
+edx-i18n-tools==1.6.2
     # via
     #   -r requirements/monitoring/../devstack.txt
     #   -r requirements/monitoring/../local.txt
@@ -420,7 +420,7 @@ factory-boy==3.3.0
     #   -r requirements/monitoring/../devstack.txt
     #   -r requirements/monitoring/../local.txt
     #   -r requirements/monitoring/../test.txt
-faker==26.0.0
+faker==26.2.0
     # via
     #   -r requirements/monitoring/../devstack.txt
     #   -r requirements/monitoring/../local.txt
@@ -493,24 +493,18 @@ jmespath==1.0.1
     #   -r requirements/monitoring/../test.txt
     #   boto3
     #   botocore
-kombu==5.3.7
+kombu==5.4.0
     # via
     #   -r requirements/monitoring/../devstack.txt
     #   -r requirements/monitoring/../local.txt
     #   -r requirements/monitoring/../production.txt
     #   -r requirements/monitoring/../test.txt
     #   celery
-lxml[html-clean]==5.2.2
+lxml==5.2.2
     # via
     #   -r requirements/monitoring/../devstack.txt
     #   -r requirements/monitoring/../local.txt
     #   edx-i18n-tools
-    #   lxml-html-clean
-lxml-html-clean==0.2.0
-    # via
-    #   -r requirements/monitoring/../devstack.txt
-    #   -r requirements/monitoring/../local.txt
-    #   lxml
 lz4==4.3.3
     # via
     #   -r requirements/monitoring/../devstack.txt
@@ -536,7 +530,7 @@ monotonic==1.6
     #   -r requirements/monitoring/../production.txt
     #   -r requirements/monitoring/../test.txt
     #   analytics-python
-moto==5.0.11
+moto==5.0.12
     # via
     #   -r requirements/monitoring/../devstack.txt
     #   -r requirements/monitoring/../local.txt
@@ -626,7 +620,7 @@ psutil==6.0.0
     #   -r requirements/monitoring/../production.txt
     #   -r requirements/monitoring/../test.txt
     #   edx-django-utils
-pycodestyle==2.12.0
+pycodestyle==2.12.1
     # via
     #   -r requirements/monitoring/../devstack.txt
     #   -r requirements/monitoring/../local.txt
@@ -650,7 +644,7 @@ pygments==2.18.0
     #   accessible-pygments
     #   pydata-sphinx-theme
     #   sphinx
-pyjwt[crypto]==2.8.0
+pyjwt[crypto]==2.9.0
     # via
     #   -r requirements/monitoring/../devstack.txt
     #   -r requirements/monitoring/../local.txt
@@ -972,7 +966,7 @@ tomlkit==0.13.0
     #   -r requirements/monitoring/../local.txt
     #   -r requirements/monitoring/../test.txt
     #   pylint
-tox==4.16.0
+tox==4.17.0
     # via
     #   -r requirements/monitoring/../devstack.txt
     #   -r requirements/monitoring/../local.txt
@@ -1051,7 +1045,7 @@ zope-event==5.0
     # via
     #   -r requirements/monitoring/../production.txt
     #   gevent
-zope-interface==6.4.post2
+zope-interface==7.0
     # via
     #   -r requirements/monitoring/../production.txt
     #   gevent

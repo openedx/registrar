@@ -50,7 +50,7 @@ defusedxml==0.8.0rc2
     # via
     #   python3-openid
     #   social-auth-core
-django==4.2.14
+django==4.2.15
     # via
     #   -c requirements/common_constraints.txt
     #   -r requirements/base.in
@@ -124,7 +124,7 @@ edx-auth-backends==4.3.0
     # via -r requirements/base.in
 edx-django-release-util==1.4.0
     # via -r requirements/base.in
-edx-django-utils==5.14.2
+edx-django-utils==5.15.0
     # via
     #   edx-drf-extensions
     #   edx-rest-api-client
@@ -138,7 +138,7 @@ idna==3.7
     # via requests
 inflection==0.5.1
     # via drf-yasg
-kombu==5.3.7
+kombu==5.4.0
     # via celery
 monotonic==1.6
     # via analytics-python
@@ -160,7 +160,7 @@ psutil==6.0.0
     # via edx-django-utils
 pycparser==2.22
     # via cffi
-pyjwt[crypto]==2.8.0
+pyjwt[crypto]==2.9.0
     # via
     #   drf-jwt
     #   edx-auth-backends

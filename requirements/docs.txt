@@ -81,7 +81,7 @@ defusedxml==0.8.0rc2
     #   -r requirements/base.txt
     #   python3-openid
     #   social-auth-core
-django==4.2.14
+django==4.2.15
     # via
     #   -c requirements/common_constraints.txt
     #   -r requirements/base.txt
@@ -166,7 +166,7 @@ edx-auth-backends==4.3.0
     # via -r requirements/base.txt
 edx-django-release-util==1.4.0
     # via -r requirements/base.txt
-edx-django-utils==5.14.2
+edx-django-utils==5.15.0
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
@@ -191,7 +191,7 @@ inflection==0.5.1
     #   drf-yasg
 jinja2==3.1.4
     # via sphinx
-kombu==5.3.7
+kombu==5.4.0
     # via
     #   -r requirements/base.txt
     #   celery
@@ -240,7 +240,7 @@ pygments==2.18.0
     #   accessible-pygments
     #   pydata-sphinx-theme
     #   sphinx
-pyjwt[crypto]==2.8.0
+pyjwt[crypto]==2.9.0
     # via
     #   -r requirements/base.txt
     #   drf-jwt

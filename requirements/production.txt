@@ -23,11 +23,11 @@ billiard==4.2.0
     # via
     #   -r requirements/base.txt
     #   celery
-boto3==1.34.150
+boto3==1.34.154
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/production.in
-botocore==1.34.150
+botocore==1.34.154
     # via
     #   boto3
     #   s3transfer
@@ -79,7 +79,7 @@ defusedxml==0.8.0rc2
     #   -r requirements/base.txt
     #   python3-openid
     #   social-auth-core
-django==4.2.14
+django==4.2.15
     # via
     #   -c requirements/common_constraints.txt
     #   -r requirements/base.txt
@@ -160,7 +160,7 @@ edx-auth-backends==4.3.0
     # via -r requirements/base.txt
 edx-django-release-util==1.4.0
     # via -r requirements/base.txt
-edx-django-utils==5.14.2
+edx-django-utils==5.15.0
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
@@ -191,7 +191,7 @@ jmespath==1.0.1
     # via
     #   boto3
     #   botocore
-kombu==5.3.7
+kombu==5.4.0
     # via
     #   -r requirements/base.txt
     #   celery
@@ -234,7 +234,7 @@ pycparser==2.22
     # via
     #   -r requirements/base.txt
     #   cffi
-pyjwt[crypto]==2.8.0
+pyjwt[crypto]==2.9.0
     # via
     #   -r requirements/base.txt
     #   drf-jwt
@@ -362,7 +362,7 @@ wcwidth==0.2.13
     #   prompt-toolkit
 zope-event==5.0
     # via gevent
-zope-interface==6.4.post2
+zope-interface==7.0
     # via gevent
 
 # The following packages are considered to be unsafe in a requirements file:
